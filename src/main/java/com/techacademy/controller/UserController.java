@@ -72,7 +72,7 @@ public class UserController {
 
     /** User更新処理 */
     @PostMapping("/update/{id}/")
-    public String postUser(@PathVariable("id") Integer id, User user, BindingResult res, Model model) {
+    public String postUser(@PathVariable("id") Integer id,@Validated User user, BindingResult res, Model model) {
         if(res.hasErrors()) {
             // エラーあり
             return getUser(null, user, model);

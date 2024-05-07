@@ -1,11 +1,14 @@
 package com.techacademy.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,5 +62,26 @@ class UserControllerTest {
         User user = (User)result.getModelAndView().getModel().get("user");
         assertEquals(1, user.getId());
         assertEquals("キラメキ太郎", user.getName());
+    }
+
+    @Test
+    @DisplayName("User一覧（全件）")
+    @WithMockUser
+    void testGetList() throws Exception {
+        // HTTPリクエストに対するレスポンスの検証
+        MvcResult result = mockMvc.perform(get("/user/list")) // URLにアクセス
+            .andExpect(status().isOk()) // ステータスを確認
+            .andExpect(model().attributeExists("userlist")) // Modelの内容を確認
+            .andExpect(model().hasNoErrors()) // Modelのエラー有無の確認
+            .andExpect(view().name("user/list")) // viewの確認
+            .andReturn(); // 内容の確認
+
+        // userlistの検証
+        // Modelからuserlistを取り出す
+        List<User> userlist = (List<User>)result.getModelAndView().getModel().get("userlist");
+        assertThat(userlist).hasSize(3);
+//        User user = (User)result.getModelAndView().getModel().get("userlist");
+//        assertEquals(1, user.getId());
+//        assertEquals("キラメキ太郎", user.getName());
     }
 }
