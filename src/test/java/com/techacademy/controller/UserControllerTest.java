@@ -80,8 +80,16 @@ class UserControllerTest {
         // Modelからuserlistを取り出す
         List<User> userlist = (List<User>)result.getModelAndView().getModel().get("userlist");
         assertThat(userlist).hasSize(3);
-//        User user = (User)result.getModelAndView().getModel().get("userlist");
-//        assertEquals(1, user.getId());
-//        assertEquals("キラメキ太郎", user.getName());
+        // userの検証
+        // Modelからuserを取り出す
+        User user = userlist.get(0);
+        assertEquals(1, user.getId());
+        assertEquals("キラメキ太郎", user.getName());
+        user = userlist.get(1);
+        assertEquals(2, user.getId());
+        assertEquals("キラメキ次郎", user.getName());
+        user = userlist.get(2);
+        assertEquals(3, user.getId());
+        assertEquals("キラメキ花子", user.getName());
     }
 }
